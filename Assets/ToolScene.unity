@@ -752,7 +752,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 176487882}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1560824654}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &176487882
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -805,7 +817,7 @@ GameObject:
   - component: {fileID: 207493657}
   m_Layer: 5
   m_Name: AddNPC BUtton
-  m_TagString: Untagged
+  m_TagString: ProtectedUI
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -873,7 +885,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 207493658}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1560824658}
+        m_TargetAssemblyTypeName: QuestEditorUIManager, Assembly-CSharp
+        m_MethodName: AddEmptyFetchItem
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &207493658
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1341,7 +1365,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &354194387
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1357,9 +1381,9 @@ RectTransform:
   - {fileID: 1688304202}
   m_Father: {fileID: 1423145294}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 160.06525, y: -262.7007}
   m_SizeDelta: {x: 306.1305, y: 195.46}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &354194388
@@ -1932,7 +1956,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Button
+  m_text: SAVE
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -2099,7 +2123,7 @@ GameObject:
   - component: {fileID: 696140976}
   m_Layer: 5
   m_Name: settingstext
-  m_TagString: Untagged
+  m_TagString: ProtectedUI
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2855,7 +2879,7 @@ GameObject:
   - component: {fileID: 1085454172}
   m_Layer: 5
   m_Name: QuestTypeDropdown
-  m_TagString: Untagged
+  m_TagString: ProtectedUI
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4127,8 +4151,14 @@ MonoBehaviour:
   _fetchPanel: {fileID: 1871752548}
   _killPanel: {fileID: 1189520251}
   _talkListContainer: {fileID: 354194387}
+  _talkItemPrefab: {fileID: 4932118239399209262, guid: 6c548fb1ec582014c90b08c6b4ca3681, type: 3}
+  _addTalkItemButton: {fileID: 1688304203}
   _fetchListContainer: {fileID: 1871752549}
+  _fetchItemPrefab: {fileID: 4893526911012345285, guid: 0a43ee003d7aa2149b37d98b71726c56, type: 3}
+  _addFetchItemButton: {fileID: 207493657}
   _killListContainer: {fileID: 1189520252}
+  _killItemPrefab: {fileID: 7254261529911593231, guid: ac9e771d4bba4534886115b76a928b69, type: 3}
+  _addKillItemButton: {fileID: 1999803381}
 --- !u!1 &1574176977
 GameObject:
   m_ObjectHideFlags: 0
@@ -4642,7 +4672,7 @@ GameObject:
   - component: {fileID: 1688304203}
   m_Layer: 5
   m_Name: AddNPC BUtton
-  m_TagString: Untagged
+  m_TagString: ProtectedUI
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4662,9 +4692,9 @@ RectTransform:
   - {fileID: 897883546}
   m_Father: {fileID: 354194387}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 153.06525, y: -15}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1688304203
@@ -4710,7 +4740,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1688304204}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1560824658}
+        m_TargetAssemblyTypeName: QuestEditorUIManager, Assembly-CSharp
+        m_MethodName: AddTalkItem
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1688304204
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5187,7 +5229,7 @@ GameObject:
   - component: {fileID: 1791793984}
   m_Layer: 5
   m_Name: DescriptionInputfield (1)
-  m_TagString: Untagged
+  m_TagString: ProtectedUI
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6045,7 +6087,7 @@ GameObject:
   - component: {fileID: 1999803381}
   m_Layer: 5
   m_Name: AddNPC BUtton
-  m_TagString: Untagged
+  m_TagString: ProtectedUI
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6113,7 +6155,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1999803382}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1560824658}
+        m_TargetAssemblyTypeName: QuestEditorUIManager, Assembly-CSharp
+        m_MethodName: AddEmptyKillItem
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1999803382
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6329,7 +6383,7 @@ GameObject:
   - component: {fileID: 2058252935}
   m_Layer: 5
   m_Name: TitleInputfield
-  m_TagString: Untagged
+  m_TagString: ProtectedUI
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

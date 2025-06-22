@@ -5,31 +5,34 @@ using UnityEngine.UI;
 
 public class QuestEditorUIManager : MonoBehaviour
 {
-    [Header("Main Editor UI")]
+    [Header("Core UI")]
     [SerializeField] private GameObject _editorPanel;
     [SerializeField] private TMP_InputField _titleInput;
     [SerializeField] private TMP_InputField _descriptionInput;
     [SerializeField] private Button _saveButton;
     [SerializeField] private TMP_Dropdown _questTypeDropdown;
 
-    [Header("Type-Specific Panels")]
+    [Header("Type Panels")]
     [SerializeField] private GameObject _talkPanel;
     [SerializeField] private GameObject _fetchPanel;
     [SerializeField] private GameObject _killPanel;
 
-    // Panel controllers
-    private TalkQuestPanelController _talkController;
-    private FetchQuestPanelController _fetchController;
-    private KillQuestPanelController _killController;
-
-    // Container references (assign in Inspector)
-    [Header("List Containers")]
+    [Header("Talk Quest UI")]
     [SerializeField] private Transform _talkListContainer;
-    [SerializeField] private Transform _fetchListContainer;
-    [SerializeField] private Transform _killListContainer;
+    [SerializeField] private GameObject _talkItemPrefab;
+    [SerializeField] private Button _addTalkItemButton;
 
-    private BaseQuest _currentQuest;
-    private BaseQuest _originalState;
+    [Header("Fetch Quest UI")]
+    [SerializeField] private Transform _fetchListContainer;
+    [SerializeField] private GameObject _fetchItemPrefab;
+    [SerializeField] private Button _addFetchItemButton;
+
+    [Header("Kill Quest UI")]
+    [SerializeField] private Transform _killListContainer;
+    [SerializeField] private GameObject _killItemPrefab;
+    [SerializeField] private Button _addKillItemButton;
+
+    private BaseQuest _originalQuest;
     private bool _isEditing;
 
     void Start()
@@ -38,185 +41,193 @@ public class QuestEditorUIManager : MonoBehaviour
         AppEvents.OnQuestSelected += OpenEditor;
         _editorPanel.SetActive(false);
 
-        // Initialize panel controllers
-        _talkController = _talkPanel.GetComponent<TalkQuestPanelController>();
-        _fetchController = _fetchPanel.GetComponent<FetchQuestPanelController>();
-        _killController = _killPanel.GetComponent<KillQuestPanelController>();
-
-        // Setup dropdown options
+        // Setup dropdown
         _questTypeDropdown.ClearOptions();
         _questTypeDropdown.AddOptions(new List<string> {
-            "Talk Quest",
-            "Fetch Quest",
-            "Kill Quest"
+            "Talk Quest", "Fetch Quest", "Kill Quest"
         });
         _questTypeDropdown.onValueChanged.AddListener(OnQuestTypeChanged);
 
-        // Add input field change listeners
-        _titleInput.onEndEdit.AddListener(_ => OnInputFieldChanged());
-        _descriptionInput.onEndEdit.AddListener(_ => OnInputFieldChanged());
+        // Setup buttons
+        //_addTalkItemButton.onClick.AddListener(AddTalkItem);
+        //_addFetchItemButton.onClick.AddListener(AddFetchItem);
+        //_addKillItemButton.onClick.AddListener(AddKillItem);
     }
+  
 
     private void OpenEditor(BaseQuest quest)
     {
-        _currentQuest = quest;
-        _originalState = quest.Clone();
+        _originalQuest = quest;
+        _isEditing = true;
+        _editorPanel.SetActive(true);
+
+        // Clear existing items
+        ClearList(_talkListContainer);
+        ClearList(_fetchListContainer);
+        ClearList(_killListContainer);
+
+        // Set common fields
         _titleInput.text = quest.Title;
         _descriptionInput.text = quest.Description;
-        _editorPanel.SetActive(true);
-        _isEditing = true;
 
-        // Activate correct panel based on quest type
+        // Set quest type and load data
+        if (quest is TalkQuest talkQuest)
+        {
+            _questTypeDropdown.value = 0;
+            LoadTalkData(talkQuest);
+        }
+        else if (quest is FetchQuest fetchQuest)
+        {
+            _questTypeDropdown.value = 1;
+            LoadFetchData(fetchQuest);
+        }
+        else if (quest is KillQuest killQuest)
+        {
+            _questTypeDropdown.value = 2;
+            LoadKillData(killQuest);
+        }
+
         UpdateActivePanel();
-
-        // Set dropdown to current type
-        SetDropdownValue();
     }
 
     private void UpdateActivePanel()
     {
-        // Deactivate all panels first
-        _talkPanel.SetActive(false);
-        _fetchPanel.SetActive(false);
-        _killPanel.SetActive(false);
-
-        // Activate the correct panel and load data
-        if (_currentQuest is TalkQuest talkQuest)
-        {
-            _talkPanel.SetActive(true);
-            _talkController.LoadData(talkQuest);
-        }
-        else if (_currentQuest is FetchQuest fetchQuest)
-        {
-            _fetchPanel.SetActive(true);
-            _fetchController.LoadData(fetchQuest);
-        }
-        else if (_currentQuest is KillQuest killQuest)
-        {
-            _killPanel.SetActive(true);
-            _killController.LoadData(killQuest);
-        }
-    }
-
-    private void SetDropdownValue()
-    {
-        if (_currentQuest is TalkQuest)
-            _questTypeDropdown.SetValueWithoutNotify(0);
-        else if (_currentQuest is FetchQuest)
-            _questTypeDropdown.SetValueWithoutNotify(1);
-        else if (_currentQuest is KillQuest)
-            _questTypeDropdown.SetValueWithoutNotify(2);
+        _talkPanel.SetActive(_questTypeDropdown.value == 0);
+        _fetchPanel.SetActive(_questTypeDropdown.value == 1);
+        _killPanel.SetActive(_questTypeDropdown.value == 2);
     }
 
     private void OnQuestTypeChanged(int typeIndex)
     {
         if (!_isEditing) return;
-
-        // Create before snapshot
-        BaseQuest beforeChange = _currentQuest.Clone();
-
-        // Convert to new type if needed
-        switch (typeIndex)
-        {
-            case 0 when !(_currentQuest is TalkQuest):
-                ConvertToNewType<TalkQuest>();
-                break;
-            case 1 when !(_currentQuest is FetchQuest):
-                ConvertToNewType<FetchQuest>();
-                break;
-            case 2 when !(_currentQuest is KillQuest):
-                ConvertToNewType<KillQuest>();
-                break;
-        }
-
-        // Create and execute command
-        var command = new UpdateQuestCommand(beforeChange, _currentQuest);
-        CommandManager.Instance.ExecuteCommand(command);
-
-        // Refresh UI
         UpdateActivePanel();
     }
 
-    private void ConvertToNewType<T>() where T : BaseQuest, new()
+    private void LoadTalkData(TalkQuest quest)
     {
-        // Create new instance of the correct type
-        var converted = new T();
-
-        // Copy common properties
-        converted.QuestID = _currentQuest.QuestID;
-        converted.Title = _currentQuest.Title;
-        converted.Description = _currentQuest.Description;
-        converted.Steps = new List<QuestStep>(_currentQuest.Steps);
-
-        // Update references
-        _currentQuest = converted;
+        foreach (string npcId in quest.NPCTargets)
+        {
+            AddTalkItem(npcId);
+        }
     }
 
-    private void SaveChanges()
+    private void LoadFetchData(FetchQuest quest)
     {
-        if (_currentQuest == null) return;
-
-        // Create modified version
-        BaseQuest modifiedQuest = _currentQuest.Clone();
-        modifiedQuest.Title = _titleInput.text;
-        modifiedQuest.Description = _descriptionInput.text;
-
-        // Save type-specific data BEFORE updating references
-        SaveTypeSpecificData(modifiedQuest);
-
-        // Check if type changed
-        bool typeChanged = _currentQuest.GetType() != modifiedQuest.GetType();
-
-        if (typeChanged)
+        foreach (var requirement in quest.RequiredItems)
         {
-            // Handle type conversion
-            QuestManager.Instance.ConvertQuestType(_currentQuest, modifiedQuest);
+            AddFetchItem(requirement.ItemID, requirement.Amount);
+        }
+    }
+
+    private void LoadKillData(KillQuest quest)
+    {
+        foreach (var target in quest.Targets)
+        {
+            AddKillItem(target.EnemyID, target.Count);
+        }
+    }
+    // added empty wrapppper methods for use with buttons
+    public void AddEmptyFetchItem() => AddFetchItem("", 1);
+    public void AddEmptyKillItem() => AddKillItem("", 1);
+
+    public void AddTalkItem(string npcId = "")
+    {
+        var item = Instantiate(_talkItemPrefab, _talkListContainer);
+        var input = item.GetComponentInChildren<TMP_InputField>();
+        if (input != null) input.text = npcId;
+    }
+
+    public void AddFetchItem(string itemId = "", int amount = 1)
+    {
+        var item = Instantiate(_fetchItemPrefab, _fetchListContainer);
+        var inputs = item.GetComponentsInChildren<TMP_InputField>();
+        if (inputs != null && inputs.Length >= 2)
+        {
+            inputs[0].text = itemId;
+            inputs[1].text = amount.ToString();
+        }
+    }
+
+    public void AddKillItem(string enemyId = "", int count = 1)
+    {
+        var item = Instantiate(_killItemPrefab, _killListContainer);
+        var inputs = item.GetComponentsInChildren<TMP_InputField>();
+        if (inputs != null && inputs.Length >= 2)
+        {
+            inputs[0].text = enemyId;
+            inputs[1].text = count.ToString();
+        }
+    }
+
+    private void ClearList(Transform container)
+    {
+        if (container == null) return;
+
+        foreach (Transform child in container)
+        {
+            if (!child.CompareTag("ProtectedUI")) // Tag your buttons
+            {
+                Destroy(child.gameObject);
+            }
+        }
+    }
+
+    public void SaveChanges()
+    {
+        if (_originalQuest == null) return;
+
+        BaseQuest modifiedQuest;
+
+        // Create new quest of SELECTED TYPE if type changed
+        if (ShouldChangeQuestType())
+        {
+            modifiedQuest = CreateNewQuestOfSelectedType();
         }
         else
         {
-            // Standard update
-            QuestManager.Instance.UpdateQuest(_currentQuest, modifiedQuest);
+            modifiedQuest = _originalQuest.Clone();
         }
 
-        // Update current references
-        _currentQuest = modifiedQuest;
-        _originalState = modifiedQuest.Clone();
+        // Update common properties
+        modifiedQuest.Title = _titleInput.text;
+        modifiedQuest.Description = _descriptionInput.text;
 
+        // Update type-specific data (using current UI type)
+        switch (_questTypeDropdown.value)
+        {
+            case 0: SaveTalkData((TalkQuest)modifiedQuest); break;
+            case 1: SaveFetchData((FetchQuest)modifiedQuest); break;
+            case 2: SaveKillData((KillQuest)modifiedQuest); break;
+        }
+
+        QuestManager.Instance.UpdateQuest(_originalQuest, modifiedQuest);
         CloseEditor();
     }
-
-    private void SaveTypeSpecificData(BaseQuest quest)
+    private bool ShouldChangeQuestType()
     {
-        // Save data based on the ACTUAL type of the quest
-        if (quest is TalkQuest talkQuest)
+        return (_originalQuest is TalkQuest && _questTypeDropdown.value != 0) ||
+               (_originalQuest is FetchQuest && _questTypeDropdown.value != 1) ||
+               (_originalQuest is KillQuest && _questTypeDropdown.value != 2);
+    }
+    private BaseQuest CreateNewQuestOfSelectedType()
+    {
+        return _questTypeDropdown.value switch
         {
-            Debug.Log($"Saving TalkQuest data: {talkQuest.Title}");
-            SaveTalkQuestData(talkQuest);
-        }
-        else if (quest is FetchQuest fetchQuest)
-        {
-            Debug.Log($"Saving FetchQuest data: {fetchQuest.Title}");
-            SaveFetchQuestData(fetchQuest);
-        }
-        else if (quest is KillQuest killQuest)
-        {
-            Debug.Log($"Saving KillQuest data: {killQuest.Title}");
-            SaveKillQuestData(killQuest);
-        }
+            0 => new TalkQuest(),
+            1 => new FetchQuest(),
+            2 => new KillQuest(),
+            _ => throw new System.NotImplementedException()
+        };
     }
 
-    // Directly save TalkQuest data from UI
-    private void SaveTalkQuestData(TalkQuest quest)
+
+
+    private void SaveTalkData(TalkQuest quest)
     {
-        if (_talkListContainer == null) return;
-
         quest.NPCTargets.Clear();
-
         foreach (Transform child in _talkListContainer)
         {
-            if (child == null) continue;
-
-            var input = child.GetComponent<TMP_InputField>();
+            var input = child.GetComponentInChildren<TMP_InputField>();
             if (input != null && !string.IsNullOrEmpty(input.text))
             {
                 quest.NPCTargets.Add(input.text);
@@ -224,19 +235,13 @@ public class QuestEditorUIManager : MonoBehaviour
         }
     }
 
-    // Directly save FetchQuest data from UI
-    private void SaveFetchQuestData(FetchQuest quest)
+    private void SaveFetchData(FetchQuest quest)
     {
-        if (_fetchListContainer == null) return;
-
         quest.RequiredItems.Clear();
-
         foreach (Transform child in _fetchListContainer)
         {
-            if (child == null) continue;
-
             var fields = child.GetComponentsInChildren<TMP_InputField>();
-            if (fields.Length >= 2 && !string.IsNullOrEmpty(fields[0].text))
+            if (fields != null && fields.Length >= 2 && !string.IsNullOrEmpty(fields[0].text))
             {
                 int amount = int.TryParse(fields[1].text, out int result) ? result : 1;
                 quest.RequiredItems.Add(new ItemRequirement
@@ -248,19 +253,13 @@ public class QuestEditorUIManager : MonoBehaviour
         }
     }
 
-    // Directly save KillQuest data from UI
-    private void SaveKillQuestData(KillQuest quest)
+    private void SaveKillData(KillQuest quest)
     {
-        if (_killListContainer == null) return;
-
         quest.Targets.Clear();
-
         foreach (Transform child in _killListContainer)
         {
-            if (child == null) continue;
-
             var fields = child.GetComponentsInChildren<TMP_InputField>();
-            if (fields.Length >= 2 && !string.IsNullOrEmpty(fields[0].text))
+            if (fields != null && fields.Length >= 2 && !string.IsNullOrEmpty(fields[0].text))
             {
                 int count = int.TryParse(fields[1].text, out int result) ? result : 1;
                 quest.Targets.Add(new EnemyTarget
@@ -272,29 +271,11 @@ public class QuestEditorUIManager : MonoBehaviour
         }
     }
 
-    private void OnInputFieldChanged()
-    {
-        if (!_isEditing) return;
-
-        // Create modified version
-        var modifiedQuest = _currentQuest.Clone();
-        modifiedQuest.Title = _titleInput.text;
-        modifiedQuest.Description = _descriptionInput.text;
-
-        // Create and execute command
-        var command = new UpdateQuestCommand(_currentQuest, modifiedQuest);
-        CommandManager.Instance.ExecuteCommand(command);
-
-        // Update current references
-        _currentQuest = modifiedQuest;
-        _originalState = modifiedQuest.Clone();
-    }
-
     private void CloseEditor()
     {
         _isEditing = false;
         _editorPanel.SetActive(false);
-        _currentQuest = null;
+        _originalQuest = null;
     }
 
     private void OnDestroy()
