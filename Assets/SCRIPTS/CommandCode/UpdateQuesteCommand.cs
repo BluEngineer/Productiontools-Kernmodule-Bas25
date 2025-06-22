@@ -8,10 +8,7 @@ public class UpdateQuestCommand : BaseCommand
         _original = original;
         _modified = modified;
         CommandName = $"Update Quest: {original.Title}";
-        QuestType = modified.GetType();
     }
-
-
 
     public override void Execute()
     {
@@ -21,18 +18,7 @@ public class UpdateQuestCommand : BaseCommand
 
     public override void Undo()
     {
-        if (_original.GetType() != _modified.GetType())
-        {
-            int index = QuestManager.Instance.quests.IndexOf(_modified);
-            if (index < 0) return;
-
-            QuestManager.Instance.quests[index] = _original;
-            AppEvents.NotifyQuestUpdated(_original);
-            AppEvents.NotifyUIUpdate();
-        }
-        else
-        {
-            QuestManager.Instance.ExecuteUpdateQuest(_modified, _original);
-        }
+        // Access through singleton instance
+        QuestManager.Instance.ExecuteUpdateQuest(_modified, _original);
     }
 }
