@@ -60,4 +60,16 @@ public class QuestManager : Singleton<QuestManager>
             AppEvents.NotifyUIUpdate();
         }
     }
+
+    public void ConvertQuestType(BaseQuest original, BaseQuest newVersion)
+    {
+        int index = quests.IndexOf(original);
+        if (index < 0) return;
+
+        quests[index] = newVersion;
+        Debug.Log($"Converted quest: {original.Title} to {newVersion.GetType().Name}");
+
+        AppEvents.NotifyQuestUpdated(newVersion);
+        AppEvents.NotifyUIUpdate();
+    }
 }

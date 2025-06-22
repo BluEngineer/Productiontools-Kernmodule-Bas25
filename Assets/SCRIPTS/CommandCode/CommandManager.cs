@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class CommandManager : Singleton<CommandManager>
 {
@@ -7,6 +8,25 @@ public class CommandManager : Singleton<CommandManager>
     public readonly Stack<BaseCommand> _undoStack = new Stack<BaseCommand>();
     [SerializeField]
     public readonly Stack<BaseCommand> _redoStack = new Stack<BaseCommand>();
+
+
+    void Update()
+    {
+        //if (!_isEditing) return;
+
+        Keyboard keyboard = Keyboard.current;
+        if (keyboard == null) return;
+
+        if (keyboard.leftShiftKey.isPressed && keyboard.zKey.wasPressedThisFrame)
+        {
+            CommandManager.Instance.Undo();
+        }
+
+        if (keyboard.leftShiftKey.isPressed && keyboard.xKey.wasPressedThisFrame)
+        {
+            CommandManager.Instance.Redo();
+        }
+    }
 
     public void ExecuteCommand(BaseCommand command)
     {
