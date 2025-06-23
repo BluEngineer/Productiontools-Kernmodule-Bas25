@@ -6,6 +6,7 @@ public class AddQuestCommand : BaseCommand
     {
         _quest = quest;
         CommandName = $"Add Quest: {quest.Title}";
+        AffectedQuest = quest; // Track affected quest
     }
 
     public override void Execute()

@@ -8,7 +8,7 @@ public class UpdateQuestCommand : BaseCommand
         _original = original;
         _modified = modified;
         CommandName = $"Update Quest: {original.Title}";
-        QuestType = modified.GetType();
+        AffectedQuest = modified; // Track affected quest
     }
 
 

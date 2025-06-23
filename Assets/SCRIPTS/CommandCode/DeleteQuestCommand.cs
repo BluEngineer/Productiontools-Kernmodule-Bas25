@@ -7,6 +7,7 @@ public class DeleteQuestCommand : BaseCommand
     {
         _quest = quest;
         CommandName = $"Delete Quest: {quest.Title}";
+        AffectedQuest = quest; // Track affected quest
     }
 
     public override void Execute()

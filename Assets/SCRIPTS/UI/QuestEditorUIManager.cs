@@ -48,6 +48,12 @@ public class QuestEditorUIManager : MonoBehaviour
         });
         _questTypeDropdown.onValueChanged.AddListener(OnQuestTypeChanged);
 
+        AppEvents.OnCloseQuestEditor += CloseEditor;
+        AppEvents.OnRefreshQuestEditor += RefreshEditor;
+
+        AppEvents.OnUndoRedoPerformed += HandleUndoRedo;
+        AppEvents.OnQuestAffectedByUndoRedo += HandleAffectedQuest;
+
         // Setup buttons
         //_addTalkItemButton.onClick.AddListener(AddTalkItem);
         //_addFetchItemButton.onClick.AddListener(AddFetchItem);
@@ -278,8 +284,34 @@ public class QuestEditorUIManager : MonoBehaviour
         _originalQuest = null;
     }
 
+    private void RefreshEditor(BaseQuest quest)
+    {
+        // Only refresh if we're editing this specific quest
+        //if (_isEditing && _originalQuest?.ID == quest.ID)
+        {
+            CloseEditor();
+            OpenEditor(quest);
+        }
+    }
+
+    private void HandleUndoRedo()
+    {
+        // Always close editor on any undo/redo
+        CloseEditor();
+    }
+
+    private void HandleAffectedQuest(BaseQuest quest)
+    {
+        // Optional: Special handling if needed
+        // Currently we just close editor for simplicity
+    }
+
     private void OnDestroy()
     {
         AppEvents.OnQuestSelected -= OpenEditor;
+        AppEvents.OnCloseQuestEditor -= CloseEditor;
+        AppEvents.OnRefreshQuestEditor -= RefreshEditor;
+        AppEvents.OnUndoRedoPerformed -= HandleUndoRedo;
+        AppEvents.OnQuestAffectedByUndoRedo -= HandleAffectedQuest;
     }
 }

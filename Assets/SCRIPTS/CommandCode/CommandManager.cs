@@ -42,6 +42,15 @@ public class CommandManager : Singleton<CommandManager>
             var command = _undoStack.Pop();
             command.Undo();
             _redoStack.Push(command);
+
+            // Notify about undo operation
+            AppEvents.InvokeUndoRedoPerformed();
+
+            // Check if command affects a quest
+            if (command is BaseCommand questCommand && questCommand.AffectedQuest != null)
+            {
+                AppEvents.InvokeQuestAffected(questCommand.AffectedQuest);
+            }
         }
     }
 
@@ -52,6 +61,15 @@ public class CommandManager : Singleton<CommandManager>
             var command = _redoStack.Pop();
             command.Execute();
             _undoStack.Push(command);
+
+            // Notify about redo operation
+            AppEvents.InvokeUndoRedoPerformed();
+
+            // Check if command affects a quest
+            if (command is BaseCommand questCommand && questCommand.AffectedQuest != null)
+            {
+                AppEvents.InvokeQuestAffected(questCommand.AffectedQuest);
+            }
         }
     }
 }
