@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 121da847a5ebf4c4faab52cf6cbf1d4c, type: 3}
+  m_Name: Buckshot_NPC
+  m_EditorClassIdentifier: 
+  ID: Buckshot_NPC
+  DisplayName: Buckshot
+  Description: " has been living in Gump Town since before there was a Gump Town,
+    or at least that\u2019s what he claims (and loudly).\r\n Nobody knows how long
+    he\u2019s actually been there because no one\u2019s ever seen him do anything
+    except stumble in a half-circle, puke into a bush, and scream slurred political
+    slogans at the moon."
+  CanGiveQuests: 1
+  CanReceiveQuests: 1

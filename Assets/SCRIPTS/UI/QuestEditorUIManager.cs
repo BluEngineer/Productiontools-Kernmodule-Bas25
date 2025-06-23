@@ -12,15 +12,11 @@ public class QuestEditorUIManager : MonoBehaviour
     [SerializeField] private Button _saveButton;
     [SerializeField] private TMP_Dropdown _questTypeDropdown;
 
-    [Header("Common Settings")]
-    [SerializeField] private TMP_InputField _startNPCInput;
-    [SerializeField] private TMP_InputField _deliveryNPCInput;
-
     [Header("Reward Settings")]
-    [SerializeField] private TMP_InputField _rewardItemInput;
     [SerializeField] private TMP_InputField _rewardQuantityInput;
     [SerializeField] private TMP_InputField _rewardGoldInput;
     [SerializeField] private TMP_InputField _rewardExpInput;
+    [SerializeField] private TMP_Dropdown _rewardItemDropdown;
 
     [Header("Type Panels")]
     [SerializeField] private GameObject _talkPanel;
@@ -42,8 +38,15 @@ public class QuestEditorUIManager : MonoBehaviour
     [SerializeField] private GameObject _killItemPrefab;
     [SerializeField] private Button _addKillItemButton;
 
+    [Header("Entity References")]
+    [SerializeField] private TMP_Dropdown _startNPCDropdown;
+    [SerializeField] private TMP_Dropdown _deliveryNPCDropdown;
+
+
+
     private BaseQuest _originalQuest;
     private bool _isEditing;
+    private EntityDatabase _entityDB;
 
     void Start()
     {
@@ -63,6 +66,9 @@ public class QuestEditorUIManager : MonoBehaviour
 
         AppEvents.OnUndoRedoPerformed += HandleUndoRedo;
         AppEvents.OnQuestAffectedByUndoRedo += HandleAffectedQuest;
+
+        _entityDB = EntityDatabase.Instance;
+        PopulateEntityDropdowns();
 
         // Setup buttons
         //_addTalkItemButton.onClick.AddListener(AddTalkItem);
@@ -85,11 +91,8 @@ public class QuestEditorUIManager : MonoBehaviour
         // Set common fields
         _titleInput.text = quest.Title;
         _descriptionInput.text = quest.Description;
-        _startNPCInput.text = quest.StartNPC;
-        _deliveryNPCInput.text = quest.DeliveryNPC;
 
         // Set reward fields
-        _rewardItemInput.text = quest.Reward.ItemID;
         _rewardQuantityInput.text = quest.Reward.Quantity.ToString();
         _rewardGoldInput.text = quest.Reward.Gold.ToString();
         //_rewardExpInput.text = quest.Reward.Experience.ToString();
@@ -110,7 +113,9 @@ public class QuestEditorUIManager : MonoBehaviour
             _questTypeDropdown.value = 2;
             LoadKillData(killQuest);
         }
-
+        EntityDropdownHelper.SetDropdownValue(_startNPCDropdown, quest.StartNPC, _entityDB.NPCs);
+        EntityDropdownHelper.SetDropdownValue(_deliveryNPCDropdown, quest.DeliveryNPC, _entityDB.NPCs);
+        EntityDropdownHelper.SetDropdownValue(_rewardItemDropdown, quest.Reward?.ItemID, _entityDB.Items);
         UpdateActivePanel();
     }
 
@@ -157,30 +162,41 @@ public class QuestEditorUIManager : MonoBehaviour
     public void AddTalkItem(string npcId = "")
     {
         var item = Instantiate(_talkItemPrefab, _talkListContainer);
-        var input = item.GetComponentInChildren<TMP_InputField>();
-        if (input != null) input.text = npcId;
+        var dropdown = item.GetComponentInChildren<TMP_Dropdown>();
+        EntityDropdownHelper.PopulateDropdown(dropdown, _entityDB.NPCs);
+        EntityDropdownHelper.SetDropdownValue(dropdown, npcId, _entityDB.NPCs);
     }
+
 
     public void AddFetchItem(string itemId = "", int amount = 1)
     {
-        var item = Instantiate(_fetchItemPrefab, _fetchListContainer);
-        var inputs = item.GetComponentsInChildren<TMP_InputField>();
-        if (inputs != null && inputs.Length >= 2)
-        {
-            inputs[0].text = itemId;
-            inputs[1].text = amount.ToString();
-        }
+        var itemGO = Instantiate(_fetchItemPrefab, _fetchListContainer);
+        var dropdown = itemGO.GetComponentInChildren<TMP_Dropdown>();
+        var amountInput = itemGO.GetComponentInChildren<TMP_InputField>();
+
+        EntityDropdownHelper.PopulateDropdown(dropdown, _entityDB.Items);
+        EntityDropdownHelper.SetDropdownValue(dropdown, itemId, _entityDB.Items);
+
+        if (amountInput) amountInput.text = amount.ToString();
     }
 
     public void AddKillItem(string enemyId = "", int count = 1)
     {
-        var item = Instantiate(_killItemPrefab, _killListContainer);
-        var inputs = item.GetComponentsInChildren<TMP_InputField>();
-        if (inputs != null && inputs.Length >= 2)
-        {
-            inputs[0].text = enemyId;
-            inputs[1].text = count.ToString();
-        }
+        var itemGO = Instantiate(_killItemPrefab, _killListContainer);
+        var dropdown = itemGO.GetComponentInChildren<TMP_Dropdown>();
+        var countInput = itemGO.GetComponentInChildren<TMP_InputField>();
+
+        EntityDropdownHelper.PopulateDropdown(dropdown, _entityDB.Enemies);
+        EntityDropdownHelper.SetDropdownValue(dropdown, enemyId, _entityDB.Enemies);
+
+        if (countInput) countInput.text = count.ToString();
+    }
+
+    private void PopulateEntityDropdowns()
+    {
+        EntityDropdownHelper.PopulateDropdown(_startNPCDropdown, _entityDB.NPCs);
+        EntityDropdownHelper.PopulateDropdown(_deliveryNPCDropdown, _entityDB.NPCs);
+        EntityDropdownHelper.PopulateDropdown(_rewardItemDropdown, _entityDB.Items);
     }
 
     private void ClearList(Transform container)
@@ -215,11 +231,9 @@ public class QuestEditorUIManager : MonoBehaviour
         // Update common properties
         modifiedQuest.Title = _titleInput.text;
         modifiedQuest.Description = _descriptionInput.text;
-        modifiedQuest.StartNPC = _startNPCInput.text;
-        modifiedQuest.DeliveryNPC = _deliveryNPCInput.text;
+
 
         // Update rewards
-        modifiedQuest.Reward.ItemID = _rewardItemInput.text;
         modifiedQuest.Reward.Quantity = ParseInt(_rewardQuantityInput.text);
         modifiedQuest.Reward.Gold = ParseInt(_rewardGoldInput.text);
         //modifiedQuest.Reward.Experience = ParseInt(_rewardExpInput.text);
@@ -231,6 +245,11 @@ public class QuestEditorUIManager : MonoBehaviour
             case 1: SaveFetchData((FetchQuest)modifiedQuest); break;
             case 2: SaveKillData((KillQuest)modifiedQuest); break;
         }
+
+        // Get values from dropdowns
+        modifiedQuest.StartNPC = EntityDropdownHelper.GetSelectedID(_startNPCDropdown, _entityDB.NPCs);
+        modifiedQuest.DeliveryNPC = EntityDropdownHelper.GetSelectedID(_deliveryNPCDropdown, _entityDB.NPCs);
+        modifiedQuest.Reward.ItemID = EntityDropdownHelper.GetSelectedID(_rewardItemDropdown, _entityDB.Items);
 
         QuestManager.Instance.UpdateQuest(_originalQuest, modifiedQuest);
         CloseEditor();
@@ -259,10 +278,13 @@ public class QuestEditorUIManager : MonoBehaviour
         quest.NPCTargets.Clear();
         foreach (Transform child in _talkListContainer)
         {
-            var input = child.GetComponentInChildren<TMP_InputField>();
-            if (input != null && !string.IsNullOrEmpty(input.text))
+            // Use GetComponentInChildren to find the UI component
+            var item = child.GetComponentInChildren<TalkQuestItemUI>();
+            if (item != null)
             {
-                quest.NPCTargets.Add(input.text);
+                string npcId = item.GetSelectedEntityId();
+                if (!string.IsNullOrEmpty(npcId))
+                    quest.NPCTargets.Add(npcId);
             }
         }
     }
@@ -272,33 +294,43 @@ public class QuestEditorUIManager : MonoBehaviour
         quest.RequiredItems.Clear();
         foreach (Transform child in _fetchListContainer)
         {
-            var fields = child.GetComponentsInChildren<TMP_InputField>();
-            if (fields != null && fields.Length >= 2 && !string.IsNullOrEmpty(fields[0].text))
+            // Use GetComponentInChildren to find the UI component
+            var item = child.GetComponentInChildren<FetchQuestItemUI>();
+            if (item != null)
             {
-                int amount = int.TryParse(fields[1].text, out int result) ? result : 1;
-                quest.RequiredItems.Add(new ItemRequirement
+                string itemId = item.GetSelectedEntityId();
+                if (!string.IsNullOrEmpty(itemId))
                 {
-                    ItemID = fields[0].text,
-                    Amount = amount
-                });
+                    quest.RequiredItems.Add(new ItemRequirement
+                    {
+                        ItemID = itemId,
+                        Amount = item.GetAmount()
+                    });
+                }
             }
         }
     }
 
     private void SaveKillData(KillQuest quest)
     {
-        quest.Targets.Clear();
-        foreach (Transform child in _killListContainer)
         {
-            var fields = child.GetComponentsInChildren<TMP_InputField>();
-            if (fields != null && fields.Length >= 2 && !string.IsNullOrEmpty(fields[0].text))
+            quest.Targets.Clear();
+            foreach (Transform child in _killListContainer)
             {
-                int count = int.TryParse(fields[1].text, out int result) ? result : 1;
-                quest.Targets.Add(new EnemyTarget
+                // Use GetComponentInChildren to find the UI component
+                var item = child.GetComponentInChildren<KillQuestItemUI>();
+                if (item != null)
                 {
-                    EnemyID = fields[0].text,
-                    Count = count
-                });
+                    string enemyId = item.GetSelectedEntityId();
+                    if (!string.IsNullOrEmpty(enemyId))
+                    {
+                        quest.Targets.Add(new EnemyTarget
+                        {
+                            EnemyID = enemyId,
+                            Count = item.GetAmount()
+                        });
+                    }
+                }
             }
         }
     }
