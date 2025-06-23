@@ -12,6 +12,16 @@ public class QuestEditorUIManager : MonoBehaviour
     [SerializeField] private Button _saveButton;
     [SerializeField] private TMP_Dropdown _questTypeDropdown;
 
+    [Header("Common Settings")]
+    [SerializeField] private TMP_InputField _startNPCInput;
+    [SerializeField] private TMP_InputField _deliveryNPCInput;
+
+    [Header("Reward Settings")]
+    [SerializeField] private TMP_InputField _rewardItemInput;
+    [SerializeField] private TMP_InputField _rewardQuantityInput;
+    [SerializeField] private TMP_InputField _rewardGoldInput;
+    [SerializeField] private TMP_InputField _rewardExpInput;
+
     [Header("Type Panels")]
     [SerializeField] private GameObject _talkPanel;
     [SerializeField] private GameObject _fetchPanel;
@@ -75,6 +85,14 @@ public class QuestEditorUIManager : MonoBehaviour
         // Set common fields
         _titleInput.text = quest.Title;
         _descriptionInput.text = quest.Description;
+        _startNPCInput.text = quest.StartNPC;
+        _deliveryNPCInput.text = quest.DeliveryNPC;
+
+        // Set reward fields
+        _rewardItemInput.text = quest.Reward.ItemID;
+        _rewardQuantityInput.text = quest.Reward.Quantity.ToString();
+        _rewardGoldInput.text = quest.Reward.Gold.ToString();
+        //_rewardExpInput.text = quest.Reward.Experience.ToString();
 
         // Set quest type and load data
         if (quest is TalkQuest talkQuest)
@@ -197,6 +215,14 @@ public class QuestEditorUIManager : MonoBehaviour
         // Update common properties
         modifiedQuest.Title = _titleInput.text;
         modifiedQuest.Description = _descriptionInput.text;
+        modifiedQuest.StartNPC = _startNPCInput.text;
+        modifiedQuest.DeliveryNPC = _deliveryNPCInput.text;
+
+        // Update rewards
+        modifiedQuest.Reward.ItemID = _rewardItemInput.text;
+        modifiedQuest.Reward.Quantity = ParseInt(_rewardQuantityInput.text);
+        modifiedQuest.Reward.Gold = ParseInt(_rewardGoldInput.text);
+        //modifiedQuest.Reward.Experience = ParseInt(_rewardExpInput.text);
 
         // Update type-specific data (using current UI type)
         switch (_questTypeDropdown.value)
@@ -313,5 +339,11 @@ public class QuestEditorUIManager : MonoBehaviour
         AppEvents.OnRefreshQuestEditor -= RefreshEditor;
         AppEvents.OnUndoRedoPerformed -= HandleUndoRedo;
         AppEvents.OnQuestAffectedByUndoRedo -= HandleAffectedQuest;
+    }
+
+    //this shit should move to a dedicated tools class. wrong responsibility here but we ball
+    private int ParseInt(string value)
+    {
+        return int.TryParse(value, out int result) ? result : 0;
     }
 }

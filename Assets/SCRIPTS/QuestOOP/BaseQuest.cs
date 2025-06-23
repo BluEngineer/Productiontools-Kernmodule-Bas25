@@ -25,12 +25,26 @@ public abstract class BaseQuest
         get; set;
     }
 
+    public string StartNPC
+    {
+        get; set;
+    }
+    public string DeliveryNPC
+    {
+        get; set;
+    }
+    public QuestReward Reward { get; set; } = new QuestReward();
+
 
     public BaseQuest()
     {
         QuestID = string.Empty;
         Title = string.Empty;
         Description = string.Empty;
+        StartNPC = string.Empty;
+        DeliveryNPC = string.Empty;
+        Reward = new QuestReward();
+
         IsActive = true;
         Steps = new List<QuestStep>();
 
