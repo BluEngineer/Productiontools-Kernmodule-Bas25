@@ -16,5 +16,10 @@ MonoBehaviour:
   DisplayName: Moonshine Bottle
   Description: Batch of very strong moonshine from that crazy old man in the back
     of the park
+  Icon: {fileID: 21300000, guid: e362da529a92625489f68cf413893545, type: 3}
+  ID: Moonshine_Bottle_ITEM
+  DisplayName: Moonshine Bottle
+  Description: Batch of very strong moonshine from that crazy old man in the back
+    of the park
   IsQuestItem: 0
   MaxStack: 10

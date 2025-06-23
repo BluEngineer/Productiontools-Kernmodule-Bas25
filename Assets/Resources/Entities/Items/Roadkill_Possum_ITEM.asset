@@ -15,5 +15,9 @@ MonoBehaviour:
   ID: Roadkill_Possum_ITEM
   DisplayName: Roadkill Possum
   Description: 
+  Icon: {fileID: 21300000, guid: e362da529a92625489f68cf413893545, type: 3}
+  ID: Roadkill_Possum_ITEM
+  DisplayName: Roadkill Possum
+  Description: 
   IsQuestItem: 1
   MaxStack: 1

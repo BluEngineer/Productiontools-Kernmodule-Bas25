@@ -20,5 +20,14 @@ MonoBehaviour:
     to discover she was now surrounded by beer-soaked gun worshippers, a Confederate
     flag the size of a boat sail, and a guy (Tank) who believes she\u2019s a hologram
     sent by George Soros."
+  Icon: {fileID: 21300000, guid: 767dda022b3d0154498334358f49434e, type: 3}
+  ID: Lisa_NPC
+  DisplayName: Lisa
+  Description: "Lisa moved to Gump Town after a glitch in a real estate app showed
+    the trailer park as a \u201Cquiet, progressive eco-village with lake access and
+    creative potential.\u201D She sold her Prius, bought a tiny home, and moved in\u2014only
+    to discover she was now surrounded by beer-soaked gun worshippers, a Confederate
+    flag the size of a boat sail, and a guy (Tank) who believes she\u2019s a hologram
+    sent by George Soros."
   CanGiveQuests: 1
   CanReceiveQuests: 1

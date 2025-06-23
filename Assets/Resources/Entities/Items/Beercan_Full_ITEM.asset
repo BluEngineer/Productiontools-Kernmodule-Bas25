@@ -15,5 +15,9 @@ MonoBehaviour:
   ID: Beercan_Full_ITEM
   DisplayName: Full Beercan
   Description: 
+  Icon: {fileID: 21300000, guid: e362da529a92625489f68cf413893545, type: 3}
+  ID: Beercan_Full_ITEM
+  DisplayName: Full Beercan
+  Description: 
   IsQuestItem: 0
   MaxStack: 64

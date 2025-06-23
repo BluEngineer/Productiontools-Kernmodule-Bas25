@@ -16,5 +16,10 @@ MonoBehaviour:
   DisplayName: Bigfoot
   Description: Your buddy bigfoot who comes crashing down from the heavens every
     evening for no explicable reason whatsoever. he's chill though.
+  Icon: {fileID: 21300000, guid: 8dfffc8391960d4499a74fec85ae0357, type: 3}
+  ID: Bigfoot_NPC
+  DisplayName: Bigfoot
+  Description: Your buddy bigfoot who comes crashing down from the heavens every
+    evening for no explicable reason whatsoever. he's chill though.
   CanGiveQuests: 1
   CanReceiveQuests: 1

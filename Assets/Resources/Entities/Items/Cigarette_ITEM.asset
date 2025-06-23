@@ -15,5 +15,9 @@ MonoBehaviour:
   ID: Cigarette_ITEM
   DisplayName: Cigarette
   Description: 
+  Icon: {fileID: 21300000, guid: e362da529a92625489f68cf413893545, type: 3}
+  ID: Cigarette_ITEM
+  DisplayName: Cigarette
+  Description: 
   IsQuestItem: 0
   MaxStack: 64

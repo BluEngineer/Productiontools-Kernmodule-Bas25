@@ -15,5 +15,9 @@ MonoBehaviour:
   ID: Government_Documents_ITEM
   DisplayName: Government Documents (Stolen)
   Description: 
+  Icon: {fileID: 21300000, guid: e362da529a92625489f68cf413893545, type: 3}
+  ID: Government_Documents_ITEM
+  DisplayName: Government Documents (Stolen)
+  Description: 
   IsQuestItem: 1
   MaxStack: 1

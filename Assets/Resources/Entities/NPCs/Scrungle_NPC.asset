@@ -18,5 +18,12 @@ MonoBehaviour:
     is a rusted-out heap wrapped in layers of barbed wire, duct tape, and no less
     than 47 "KEEP OUT" signs. According to local legend, Crank was once a brilliant
     chemist who got kicked out of MIT for "askin' the real questions."
+  Icon: {fileID: 21300000, guid: be9f592df791d774cb86a6e48df29ba3, type: 3}
+  ID: Scrungle_NPC
+  DisplayName: Scrungle
+  Description: Old Crank has lived in Lot #3 longer than anyone remembers. The trailer
+    is a rusted-out heap wrapped in layers of barbed wire, duct tape, and no less
+    than 47 "KEEP OUT" signs. According to local legend, Crank was once a brilliant
+    chemist who got kicked out of MIT for "askin' the real questions."
   CanGiveQuests: 1
   CanReceiveQuests: 1

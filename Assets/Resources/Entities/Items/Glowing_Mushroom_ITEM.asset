@@ -15,5 +15,9 @@ MonoBehaviour:
   ID: Glowing_Mushroom_ITEM
   DisplayName: Glowing Mushrooms
   Description: 
+  Icon: {fileID: 21300000, guid: e362da529a92625489f68cf413893545, type: 3}
+  ID: Glowing_Mushroom_ITEM
+  DisplayName: Glowing Mushrooms
+  Description: 
   IsQuestItem: 1
   MaxStack: 20

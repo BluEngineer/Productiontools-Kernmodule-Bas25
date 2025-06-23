@@ -15,5 +15,9 @@ MonoBehaviour:
   ID: Fish_Regular_ITEM
   DisplayName: Regular Fish
   Description: 'Just a regular old dead fish '
+  Icon: {fileID: 21300000, guid: e362da529a92625489f68cf413893545, type: 3}
+  ID: Fish_Regular_ITEM
+  DisplayName: Regular Fish
+  Description: 'Just a regular old dead fish '
   IsQuestItem: 0
   MaxStack: 64

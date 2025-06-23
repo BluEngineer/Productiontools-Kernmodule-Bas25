@@ -42,6 +42,12 @@ public class QuestEditorUIManager : MonoBehaviour
     [SerializeField] private TMP_Dropdown _startNPCDropdown;
     [SerializeField] private TMP_Dropdown _deliveryNPCDropdown;
 
+    [Header("Entity Icons")] // Cool little icons for the dropdown menu's
+    [SerializeField] private Image _startNPCIcon;
+    [SerializeField] private Image _deliveryNPCIcon;
+    [SerializeField] private Image _rewardItemIcon;
+
+
 
 
     private BaseQuest _originalQuest;
@@ -97,6 +103,11 @@ public class QuestEditorUIManager : MonoBehaviour
         _rewardGoldInput.text = quest.Reward.Gold.ToString();
         //_rewardExpInput.text = quest.Reward.Experience.ToString();
 
+        // Add icon updates
+        UpdateEntityIcon(_startNPCIcon, quest.StartNPC, _entityDB.NPCs);
+        UpdateEntityIcon(_deliveryNPCIcon, quest.DeliveryNPC, _entityDB.NPCs);
+        UpdateEntityIcon(_rewardItemIcon, quest.Reward?.ItemID, _entityDB.Items);
+
         // Set quest type and load data
         if (quest is TalkQuest talkQuest)
         {
@@ -116,6 +127,16 @@ public class QuestEditorUIManager : MonoBehaviour
         EntityDropdownHelper.SetDropdownValue(_startNPCDropdown, quest.StartNPC, _entityDB.NPCs);
         EntityDropdownHelper.SetDropdownValue(_deliveryNPCDropdown, quest.DeliveryNPC, _entityDB.NPCs);
         EntityDropdownHelper.SetDropdownValue(_rewardItemDropdown, quest.Reward?.ItemID, _entityDB.Items);
+
+        UpdateNPCDropdownIcon(_startNPCIcon, _startNPCDropdown);
+        UpdateNPCDropdownIcon(_deliveryNPCIcon, _deliveryNPCDropdown);
+        UpdateItemDropdownIcon(_rewardItemIcon, _rewardItemDropdown);
+
+        // Add dropdown listeners
+        _startNPCDropdown.onValueChanged.AddListener((index) => UpdateNPCDropdownIcon(_startNPCIcon, _startNPCDropdown));
+        _deliveryNPCDropdown.onValueChanged.AddListener((index) => UpdateNPCDropdownIcon(_deliveryNPCIcon, _deliveryNPCDropdown));
+        _rewardItemDropdown.onValueChanged.AddListener((index) => UpdateItemDropdownIcon(_rewardItemIcon, _rewardItemDropdown));
+
         UpdateActivePanel();
     }
 
@@ -335,11 +356,57 @@ public class QuestEditorUIManager : MonoBehaviour
         }
     }
 
+    private void UpdateEntityIcon<T>(Image icon, string entityId, List<T> entityList) where T : EntityData
+    {
+        if (icon == null) return;
+
+        Sprite iconSprite = null;
+
+        if (!string.IsNullOrEmpty(entityId))
+        {
+            T entity = entityList.Find(e => e.ID == entityId);
+            if (entity != null)
+            {
+                iconSprite = entity.Icon;
+            }
+        }
+
+        // Always set the sprite - keeps component enabled
+        icon.sprite = iconSprite;
+    }
+
+    private void UpdateNPCDropdownIcon(Image icon, TMP_Dropdown dropdown)
+    {
+        if (icon == null || dropdown == null) return;
+
+        // Always ensure the icon is enabled
+        icon.enabled = true;
+
+        string id = EntityDropdownHelper.GetSelectedID(dropdown, _entityDB.NPCs);
+        UpdateEntityIcon(icon, id, _entityDB.NPCs);
+    }
+
+    private void UpdateItemDropdownIcon(Image icon, TMP_Dropdown dropdown)
+    {
+        if (icon == null || dropdown == null) return;
+
+        // Always ensure the icon is enabled
+        icon.enabled = true;
+
+        string id = EntityDropdownHelper.GetSelectedID(dropdown, _entityDB.Items);
+        UpdateEntityIcon(icon, id, _entityDB.Items);
+    }
+
+
     private void CloseEditor()
     {
         _isEditing = false;
         _editorPanel.SetActive(false);
         _originalQuest = null;
+
+        _startNPCDropdown.onValueChanged.RemoveAllListeners();
+        _deliveryNPCDropdown.onValueChanged.RemoveAllListeners();
+        _rewardItemDropdown.onValueChanged.RemoveAllListeners();
     }
 
     private void RefreshEditor(BaseQuest quest)

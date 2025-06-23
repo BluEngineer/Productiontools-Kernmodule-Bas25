@@ -19,5 +19,13 @@ MonoBehaviour:
     he\u2019s actually been there because no one\u2019s ever seen him do anything
     except stumble in a half-circle, puke into a bush, and scream slurred political
     slogans at the moon."
+  Icon: {fileID: 21300000, guid: e362da529a92625489f68cf413893545, type: 3}
+  ID: Buckshot_NPC
+  DisplayName: Buckshot
+  Description: " has been living in Gump Town since before there was a Gump Town,
+    or at least that\u2019s what he claims (and loudly).\r\n Nobody knows how long
+    he\u2019s actually been there because no one\u2019s ever seen him do anything
+    except stumble in a half-circle, puke into a bush, and scream slurred political
+    slogans at the moon."
   CanGiveQuests: 1
   CanReceiveQuests: 1

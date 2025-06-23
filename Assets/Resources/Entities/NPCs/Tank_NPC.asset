@@ -15,5 +15,9 @@ MonoBehaviour:
   ID: Tank_NPC
   DisplayName: Tank
   Description: Your crazy conspiratist alcoholic neighbour
+  Icon: {fileID: 21300000, guid: 37d948b596b5342428cf8d54c843f17d, type: 3}
+  ID: Tank_NPC
+  DisplayName: Tank
+  Description: Your crazy conspiratist alcoholic neighbour
   CanGiveQuests: 1
   CanReceiveQuests: 1
