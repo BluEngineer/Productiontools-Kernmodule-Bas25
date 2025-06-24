@@ -48,6 +48,16 @@ public class QuestEditorUIManager : MonoBehaviour
     [SerializeField] private Image _rewardItemIcon;
 
 
+    [Header("Dialogue Settings")]
+    [SerializeField] private GameObject _dialogueLinePrefab;
+    [SerializeField] private Transform _startDialogueContainer;
+    [SerializeField] private Transform _completionDialogueContainer;
+    [SerializeField] private Button _addStartLineButton;
+    [SerializeField] private Button _addCompletionLineButton;
+
+    private List<DialogueLineUI> _startLines = new List<DialogueLineUI>();
+    private List<DialogueLineUI> _completionLines = new List<DialogueLineUI>();
+
 
 
     private BaseQuest _originalQuest;
@@ -75,6 +85,9 @@ public class QuestEditorUIManager : MonoBehaviour
 
         _entityDB = EntityDatabase.Instance;
         PopulateEntityDropdowns();
+
+        _addStartLineButton.onClick.AddListener(() => AddDialogueLine(true));
+        _addCompletionLineButton.onClick.AddListener(() => AddDialogueLine(false));
 
         // Setup buttons
         //_addTalkItemButton.onClick.AddListener(AddTalkItem);
@@ -136,6 +149,23 @@ public class QuestEditorUIManager : MonoBehaviour
         _startNPCDropdown.onValueChanged.AddListener((index) => UpdateNPCDropdownIcon(_startNPCIcon, _startNPCDropdown));
         _deliveryNPCDropdown.onValueChanged.AddListener((index) => UpdateNPCDropdownIcon(_deliveryNPCIcon, _deliveryNPCDropdown));
         _rewardItemDropdown.onValueChanged.AddListener((index) => UpdateItemDropdownIcon(_rewardItemIcon, _rewardItemDropdown));
+
+        // Clear existing dialogue lines
+        ClearDialogueLines(_startDialogueContainer, _startLines);
+        ClearDialogueLines(_completionDialogueContainer, _completionLines);
+
+        // Load start dialogue
+        foreach (string line in quest.StartDialogueLines)
+        {
+            AddDialogueLine(true, line);
+        }
+
+        // Load completion dialogue
+        foreach (string line in quest.CompletionDialogueLines)
+        {
+            AddDialogueLine(false, line);
+        }
+
 
         UpdateActivePanel();
     }
@@ -272,6 +302,8 @@ public class QuestEditorUIManager : MonoBehaviour
         modifiedQuest.DeliveryNPC = EntityDropdownHelper.GetSelectedID(_deliveryNPCDropdown, _entityDB.NPCs);
         modifiedQuest.Reward.ItemID = EntityDropdownHelper.GetSelectedID(_rewardItemDropdown, _entityDB.Items);
 
+        SaveDialogueData(modifiedQuest);
+
         QuestManager.Instance.UpdateQuest(_originalQuest, modifiedQuest);
         CloseEditor();
     }
@@ -396,7 +428,49 @@ public class QuestEditorUIManager : MonoBehaviour
         string id = EntityDropdownHelper.GetSelectedID(dropdown, _entityDB.Items);
         UpdateEntityIcon(icon, id, _entityDB.Items);
     }
+    //DIALOGUE STUFF
+    private void AddDialogueLine(bool isStartDialogue, string text = "")
+    {
+        Transform container = isStartDialogue ? _startDialogueContainer : _completionDialogueContainer;
+        List<DialogueLineUI> list = isStartDialogue ? _startLines : _completionLines;
 
+        var lineObj = Instantiate(_dialogueLinePrefab, container);
+        var dialogueLine = lineObj.GetComponent<DialogueLineUI>();
+        dialogueLine.Initialize(text);
+
+        dialogueLine.OnDelete += (line) => DeleteDialogueLine(line, list);
+        list.Add(dialogueLine);
+    }
+
+    private void DeleteDialogueLine(DialogueLineUI line, List<DialogueLineUI> list)
+    {
+        list.Remove(line);
+        Destroy(line.gameObject);
+    }
+
+    private void ClearDialogueLines(Transform container, List<DialogueLineUI> list)
+    {
+        foreach (var line in list)
+        {
+            Destroy(line.gameObject);
+        }
+        list.Clear();
+    }
+
+    private void SaveDialogueData(BaseQuest quest)
+    {
+        quest.StartDialogueLines.Clear();
+        foreach (var line in _startLines)
+        {
+            quest.StartDialogueLines.Add(line.Text);
+        }
+
+        quest.CompletionDialogueLines.Clear();
+        foreach (var line in _completionLines)
+        {
+            quest.CompletionDialogueLines.Add(line.Text);
+        }
+    }
 
     private void CloseEditor()
     {

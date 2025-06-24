@@ -1,4 +1,5 @@
 using TMPro;
+using UnityEditor.PackageManager.Requests;
 using UnityEngine;
 using UnityEngine.UI;
 public class UIQuestListItem : MonoBehaviour
@@ -10,12 +11,13 @@ public class UIQuestListItem : MonoBehaviour
     [SerializeField] private Button _deleteButton; 
     //[SerializeField] private TMP_Text _selectButtonText;
     [SerializeField] private TMP_Text _deleteButtonText;
+    [SerializeField] private Button exportButton; // Added export button
 
-    private BaseQuest _linkedQuest;
+    private BaseQuest _quest;
 
     public void Initialize(BaseQuest quest)
     {
-        _linkedQuest = quest;
+        _quest = quest;
 
 
         _titleText.text = string.IsNullOrEmpty(quest.Title) ? "New Quest" : quest.Title;
@@ -25,7 +27,7 @@ public class UIQuestListItem : MonoBehaviour
 
 
 
-
+        exportButton.onClick.AddListener(ExportQuest);
         _selectButton.onClick.AddListener(OnSelect);
         _deleteButton.onClick.AddListener(OnDelete);
     }
@@ -40,12 +42,18 @@ public class UIQuestListItem : MonoBehaviour
 
     private void OnSelect()
     {
-        AppEvents.NotifyQuestSelected(_linkedQuest);
+        AppEvents.NotifyQuestSelected(_quest);
+    }
+
+
+    private void ExportQuest()
+    {
+        QuestSerializer.ExportQuest(_quest);
     }
 
     private void OnDelete()
     {
-        QuestManager.Instance.DeleteQuest(_linkedQuest);
+        QuestManager.Instance.DeleteQuest(_quest);
     }
 
     public void UpdateTitle(string newTitle)
