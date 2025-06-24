@@ -3,13 +3,13 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Quest Entities/Item", fileName = "ITEM_")]
 public class ItemData : EntityData
 {
-    public string ID;
-    public string DisplayName;
-    [TextArea] public string Description;
+   // public string ID;
+   // public string DisplayName;
+   // [TextArea] public string Description;
     public bool IsQuestItem;
     public int MaxStack = 1;
 
-    private void OnValidate()
+    protected override void OnValidate()
     {
         if (string.IsNullOrEmpty(ID))
         {

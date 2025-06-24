@@ -3,8 +3,11 @@ using UnityEngine;
 public abstract class EntityData : ScriptableObject
 {
     public string ID;
+
     public string DisplayName;
+
     [TextArea] public string Description;
+
     public Sprite Icon;
 
     protected virtual void OnValidate()

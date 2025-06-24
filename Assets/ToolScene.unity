@@ -4978,7 +4978,6 @@ MonoBehaviour:
   _addButtonText: {fileID: 1792347375}
   _exportAllButton: {fileID: 771255283}
   _importButton: {fileID: 588232666}
-  _importPathInput: {fileID: 0}
 --- !u!1 &771255281
 GameObject:
   m_ObjectHideFlags: 0
