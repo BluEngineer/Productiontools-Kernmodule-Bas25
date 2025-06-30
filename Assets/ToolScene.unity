@@ -1640,7 +1640,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 48.4694, y: 1.6}
+  m_AnchoredPosition: {x: 50.1, y: -10.4}
   m_SizeDelta: {x: 131.152, y: 122.5019}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &176487879
@@ -2666,6 +2666,7 @@ GameObject:
   - component: {fileID: 354194390}
   - component: {fileID: 354194391}
   - component: {fileID: 354194392}
+  - component: {fileID: 354194393}
   m_Layer: 5
   m_Name: TalkQuestPanel
   m_TagString: Untagged
@@ -2690,8 +2691,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 160.06525, y: -451.0091}
-  m_SizeDelta: {x: 306.1305, y: 195.46}
+  m_AnchoredPosition: {x: 87, y: -144.769}
+  m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &354194388
 MonoBehaviour:
@@ -2799,6 +2800,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb4c57fe2576cf44e8a4fc118d8f8812, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &354194393
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 354194386}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HorizontalFit: 2
+  m_VerticalFit: 2
 --- !u!1 &356277651
 GameObject:
   m_ObjectHideFlags: 0
@@ -5192,7 +5207,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &771255282
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7124,6 +7139,7 @@ GameObject:
   - component: {fileID: 1189520255}
   - component: {fileID: 1189520254}
   - component: {fileID: 1189520258}
+  - component: {fileID: 1189520259}
   m_Layer: 5
   m_Name: KillQuestPanel
   m_TagString: Untagged
@@ -7257,6 +7273,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 075680b787c54bf4ba1434005998a752, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1189520259
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1189520251}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HorizontalFit: 2
+  m_VerticalFit: 2
 --- !u!1 &1200278329
 GameObject:
   m_ObjectHideFlags: 0
@@ -10202,7 +10232,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 153.06525, y: -15}
+  m_AnchoredPosition: {x: 80, y: -15}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1688304203
@@ -10715,7 +10745,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 260.20392, y: -10.635399}
+  m_AnchoredPosition: {x: 268.5, y: -10.635399}
   m_SizeDelta: {x: 246.4116, y: 44.4306}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1738365129
@@ -11789,6 +11819,7 @@ GameObject:
   - component: {fileID: 1871752552}
   - component: {fileID: 1871752551}
   - component: {fileID: 1871752550}
+  - component: {fileID: 1871752555}
   m_Layer: 5
   m_Name: FetchQuestPanel
   m_TagString: Untagged
@@ -11922,6 +11953,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1871752548}
   m_CullTransparentMesh: 1
+--- !u!114 &1871752555
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1871752548}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HorizontalFit: 2
+  m_VerticalFit: 2
 --- !u!1 &1893374055
 GameObject:
   m_ObjectHideFlags: 0
