@@ -1,0 +1,207 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="UIManager" Collapsed="true">
+    <Position X="4.5" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\UIManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BaseQuest" Collapsed="true">
+    <Position X="2.75" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIBAAAAAAggAEQAEAgAAAAAgAAAAgAAAAAAAEAAARA=</HashCode>
+      <FileName>Assets\SCRIPTS\QuestOOP\BaseQuest.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FetchQuest" Collapsed="true">
+    <Position X="2.75" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAEBAAAAABA=</HashCode>
+      <FileName>Assets\SCRIPTS\QuestOOP\FetchQuest.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="ItemRequirement" Collapsed="true">
+    <Position X="9.5" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAgAAAAACAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\SCRIPTS\QuestOOP\FetchQuest.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="KillQuest" Collapsed="true">
+    <Position X="0.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAAAAAAAAAAAAAAAAAgAAAAEAAAAABAAAAABA=</HashCode>
+      <FileName>Assets\SCRIPTS\QuestOOP\KillQuest.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="EnemyTarget" Collapsed="true">
+    <Position X="9.5" Y="8.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\SCRIPTS\QuestOOP\KillQuest.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="QuestManager" Collapsed="true">
+    <Position X="6.5" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAACABEAAAIAAAAAAARAAAAkAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\SCRIPTS\QuestOOP\QuestManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="QuestReward" Collapsed="true">
+    <Position X="9.5" Y="9" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAgAAAQBE=</HashCode>
+      <FileName>Assets\SCRIPTS\QuestOOP\QuestReward.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="QuestStep" Collapsed="true">
+    <Position X="9.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAMABAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\SCRIPTS\QuestOOP\QuestStep.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TalkQuest" Collapsed="true">
+    <Position X="5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAAAAAAAAAAQAAAAAAgAAAAAAAAAABAAAAABA=</HashCode>
+      <FileName>Assets\SCRIPTS\QuestOOP\TalkQuest.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="EnemyData" Collapsed="true">
+    <Position X="11.5" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAEAAAAAAAAQAAAAAAIAAAAAAAA=</HashCode>
+      <FileName>Assets\SCRIPTS\ObjectDataScripts\EnemyData.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EntityData" Collapsed="true">
+    <Position X="13.75" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAAAAAAggAAAAAEAAAAAAAAAAAAAAAAAAAEAAAA=</HashCode>
+      <FileName>Assets\SCRIPTS\ObjectDataScripts\EntityData.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EntityDatabase" Collapsed="true">
+    <Position X="11.25" Y="9" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACEAAACAAAACAAAAAAAAEAAAAEAAAAAQAAAAAIAgEA=</HashCode>
+      <FileName>Assets\SCRIPTS\ObjectDataScripts\EntityDatabase.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ItemData" Collapsed="true">
+    <Position X="13.75" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAACAAAEAAAAAAAAAAAAAIAAAAAAAAAA=</HashCode>
+      <FileName>Assets\SCRIPTS\ObjectDataScripts\ItemData.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NPCData" Collapsed="true">
+    <Position X="16" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAACAEAAAAAAAAAAAAAAAAAAAAAEAA=</HashCode>
+      <FileName>Assets\SCRIPTS\ObjectDataScripts\NPCData.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UpdateQuestCommand" Collapsed="true">
+    <Position X="1.25" Y="12.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAABAQAAAAAAgAAAAAAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>Assets\SCRIPTS\CommandCode\UpdateQuesteCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AddQuestCommand" Collapsed="true">
+    <Position X="3.5" Y="12.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAABAQAAAAAAAAAAAAAAAAABAAAAAAAAAA=</HashCode>
+      <FileName>Assets\SCRIPTS\CommandCode\AddQuestCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BaseCommand" Collapsed="true">
+    <Position X="4.5" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAABAQAAAAAQAAAAAAAAAAAAAQAAAAAAAA=</HashCode>
+      <FileName>Assets\SCRIPTS\CommandCode\BaseCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CommandManager" Collapsed="true">
+    <Position X="1.25" Y="10.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIYAAAAAAAAEBAAAAAAAAAABAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\SCRIPTS\CommandCode\CommandManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeleteQuestCommand" Collapsed="true">
+    <Position X="5.75" Y="12.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAABAQAAAAgAAAAAAAAAAAABAAAAAAAAAA=</HashCode>
+      <FileName>Assets\SCRIPTS\CommandCode\DeleteQuestCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FieldEditCommand" Collapsed="true">
+    <Position X="8" Y="12.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAABAQAAACAAAAAAAAAAAAGAAAAAAgAAAA=</HashCode>
+      <FileName>Assets\SCRIPTS\CommandCode\FieldEditCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DialogueLineUI" Collapsed="true">
+    <Position X="11.25" Y="8.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAEAAAAAQAAIAAAAAAAAAAAAAAAAAAACAAAAEE=</HashCode>
+      <FileName>Assets\SCRIPTS\UI\DialogueUI\DialogueLineUI.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FetchQuestItemUI" Collapsed="true">
+    <Position X="13.5" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAAAIAQgAQAAAAAACAAAAACBAAAEAAAAAAAAAEA=</HashCode>
+      <FileName>Assets\SCRIPTS\UI\QuestItemUI stuff\FetchQuestItemUI.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="KillQuestItemUI" Collapsed="true">
+    <Position X="15.75" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQEAAAAAIAQgAQAAAAAACAAAAAABAAAEAAAAAAAAAEA=</HashCode>
+      <FileName>Assets\SCRIPTS\UI\QuestItemUI stuff\KillQuestItemUI.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="QuestItemUI" Collapsed="true">
+    <Position X="15.75" Y="9" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACAAAAQAAAAgAQAAAQAACAAAAAAAAAAEAAAAAAAAAEE=</HashCode>
+      <FileName>Assets\SCRIPTS\UI\QuestItemUI stuff\QuestItemUI.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TalkQuestItemUI" Collapsed="true">
+    <Position X="18" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAQAAIAQgAQAAAAAACAAAAAABAAAEAAAAAAAAAEA=</HashCode>
+      <FileName>Assets\SCRIPTS\UI\QuestItemUI stuff\TalkQuestItemUI.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="System.Object" Collapsed="true">
+    <Position X="5.25" Y="2.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Interface Name="IQuest" Collapsed="true">
+    <Position X="2.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAEAAAAAAAAAAAAAAAgAAAAABAAAAAAA=</HashCode>
+      <FileName>Assets\SCRIPTS\QuestOOP\IQuest.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="ICommand" Collapsed="true">
+    <Position X="4.5" Y="10.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAABAQAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\SCRIPTS\CommandCode\ICommand.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

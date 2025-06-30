@@ -23,12 +23,11 @@ public class UIQuestListItem : MonoBehaviour
 
         _titleText.text = string.IsNullOrEmpty(quest.Title) ? "New Quest" : quest.Title;
         _typeText.text = GetQuestType(quest);
-        _typeText.text = GetQuestType(quest);
         //_selectButtonText.text = "Edit";
         _deleteButtonText.text = "Delete";
 
 
-        //button.onClick.AddListener(() => onClick?.Invoke());
+        button.onClick.AddListener(() => onClick?.Invoke());
         exportButton.onClick.AddListener(ExportQuest);
         _selectButton.onClick.AddListener(OnSelect);
         _deleteButton.onClick.AddListener(OnDelete);

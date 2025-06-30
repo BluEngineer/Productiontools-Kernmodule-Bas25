@@ -172,6 +172,8 @@ public class QuestEditorUIManager : MonoBehaviour
 
         SetupEventListeners();
         UpdateActivePanel();
+
+
     }
 
     private void UpdateActivePanel()
