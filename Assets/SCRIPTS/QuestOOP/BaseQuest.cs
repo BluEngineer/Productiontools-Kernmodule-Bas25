@@ -53,7 +53,21 @@ public abstract class BaseQuest
 
     public virtual BaseQuest Clone()
     {
-        return (BaseQuest)MemberwiseClone();
+        var clone = (BaseQuest)MemberwiseClone();
+
+        // Clone collections to avoid reference sharing
+        clone.Steps = new List<QuestStep>(Steps);
+        clone.StartDialogueLines = new List<string>(StartDialogueLines);
+        clone.CompletionDialogueLines = new List<string>(CompletionDialogueLines);
+        clone.Reward = Reward != null ? new QuestReward
+        {
+            ItemID = Reward.ItemID,
+            Quantity = Reward.Quantity,
+            Gold = Reward.Gold,
+            Experience = Reward.Experience
+        } : new QuestReward();
+
+        return clone;
     }
 
     // Serialization hooks =========================================

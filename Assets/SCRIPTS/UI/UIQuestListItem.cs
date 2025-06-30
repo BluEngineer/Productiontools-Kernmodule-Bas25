@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 //using UnityEditor.PackageManager.Requests;
 using UnityEngine;
@@ -15,18 +16,19 @@ public class UIQuestListItem : MonoBehaviour
 
     private BaseQuest _quest;
 
-    public void Initialize(BaseQuest quest)
+    public void Initialize(BaseQuest quest, Action onClick)
     {
         _quest = quest;
 
 
         _titleText.text = string.IsNullOrEmpty(quest.Title) ? "New Quest" : quest.Title;
         _typeText.text = GetQuestType(quest);
+        _typeText.text = GetQuestType(quest);
         //_selectButtonText.text = "Edit";
         _deleteButtonText.text = "Delete";
 
 
-
+        //button.onClick.AddListener(() => onClick?.Invoke());
         exportButton.onClick.AddListener(ExportQuest);
         _selectButton.onClick.AddListener(OnSelect);
         _deleteButton.onClick.AddListener(OnDelete);

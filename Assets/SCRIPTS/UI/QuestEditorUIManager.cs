@@ -2,6 +2,9 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
+using Unity.VisualScripting;
+
 
 public class QuestEditorUIManager : MonoBehaviour
 {
@@ -61,6 +64,7 @@ public class QuestEditorUIManager : MonoBehaviour
 
 
     private BaseQuest _originalQuest;
+    private BaseQuest _workingCopy;
     private bool _isEditing;
     private EntityDatabase _entityDB;
 
@@ -94,13 +98,13 @@ public class QuestEditorUIManager : MonoBehaviour
         //_addFetchItemButton.onClick.AddListener(AddFetchItem);
         //_addKillItemButton.onClick.AddListener(AddKillItem);
     }
-  
 
     private void OpenEditor(BaseQuest quest)
     {
         _originalQuest = quest;
         _isEditing = true;
         _editorPanel.SetActive(true);
+        _workingCopy = quest.Clone();
 
         // Clear existing items
         ClearList(_talkListContainer);
@@ -108,12 +112,12 @@ public class QuestEditorUIManager : MonoBehaviour
         ClearList(_killListContainer);
 
         // Set common fields
-        _titleInput.text = quest.Title;
-        _descriptionInput.text = quest.Description;
+        _titleInput.text = _workingCopy.Title;
+        _descriptionInput.text = _workingCopy.Description;
 
         // Set reward fields
-        _rewardQuantityInput.text = quest.Reward.Quantity.ToString();
-        _rewardGoldInput.text = quest.Reward.Gold.ToString();
+        _rewardQuantityInput.text = _workingCopy.Reward.Quantity.ToString();
+        _rewardGoldInput.text = _workingCopy.Reward.Gold.ToString();
         //_rewardExpInput.text = quest.Reward.Experience.ToString();
 
         // Add icon updates
@@ -166,7 +170,7 @@ public class QuestEditorUIManager : MonoBehaviour
             AddDialogueLine(false, line);
         }
 
-
+        SetupEventListeners();
         UpdateActivePanel();
     }
 
@@ -265,66 +269,74 @@ public class QuestEditorUIManager : MonoBehaviour
 
     public void SaveChanges()
     {
-        if (_originalQuest == null) return;
+        if (_originalQuest == null || _workingCopy == null) return;
 
-        BaseQuest modifiedQuest;
+        // Determine if quest type has changed
+        bool shouldChangeType = (_originalQuest is TalkQuest && _questTypeDropdown.value != 0) ||
+                               (_originalQuest is FetchQuest && _questTypeDropdown.value != 1) ||
+                               (_originalQuest is KillQuest && _questTypeDropdown.value != 2);
 
-        // Create new quest of SELECTED TYPE if type changed
-        if (ShouldChangeQuestType())
+        BaseQuest modifiedQuest = _workingCopy;
+
+        if (shouldChangeType)
         {
-            modifiedQuest = CreateNewQuestOfSelectedType();
-        }
-        else
-        {
-            modifiedQuest = _originalQuest.Clone();
+            // Create new quest of selected type
+            switch (_questTypeDropdown.value)
+            {
+                case 0: modifiedQuest = new TalkQuest(); break;
+                case 1: modifiedQuest = new FetchQuest(); break;
+                case 2: modifiedQuest = new KillQuest(); break;
+            }
+
+            // Copy common properties
+            modifiedQuest.Title = _workingCopy.Title;
+            modifiedQuest.Description = _workingCopy.Description;
+            modifiedQuest.StartNPC = _workingCopy.StartNPC;
+            modifiedQuest.DeliveryNPC = _workingCopy.DeliveryNPC;
+            modifiedQuest.Reward = new QuestReward
+            {
+                ItemID = _workingCopy.Reward.ItemID,
+                Quantity = _workingCopy.Reward.Quantity,
+                Gold = _workingCopy.Reward.Gold,
+                Experience = _workingCopy.Reward.Experience
+            };
+            modifiedQuest.StartDialogueLines = new List<string>(_workingCopy.StartDialogueLines);
+            modifiedQuest.CompletionDialogueLines = new List<string>(_workingCopy.CompletionDialogueLines);
         }
 
-        // Update common properties
+        // Update from UI
         modifiedQuest.Title = _titleInput.text;
         modifiedQuest.Description = _descriptionInput.text;
-
-
-        // Update rewards
         modifiedQuest.Reward.Quantity = ParseInt(_rewardQuantityInput.text);
         modifiedQuest.Reward.Gold = ParseInt(_rewardGoldInput.text);
-        //modifiedQuest.Reward.Experience = ParseInt(_rewardExpInput.text);
-
-        // Update type-specific data (using current UI type)
-        switch (_questTypeDropdown.value)
-        {
-            case 0: SaveTalkData((TalkQuest)modifiedQuest); break;
-            case 1: SaveFetchData((FetchQuest)modifiedQuest); break;
-            case 2: SaveKillData((KillQuest)modifiedQuest); break;
-        }
 
         // Get values from dropdowns
         modifiedQuest.StartNPC = EntityDropdownHelper.GetSelectedID(_startNPCDropdown, _entityDB.NPCs);
         modifiedQuest.DeliveryNPC = EntityDropdownHelper.GetSelectedID(_deliveryNPCDropdown, _entityDB.NPCs);
         modifiedQuest.Reward.ItemID = EntityDropdownHelper.GetSelectedID(_rewardItemDropdown, _entityDB.Items);
 
+        // Update type-specific data with safe casting
+        if (modifiedQuest is TalkQuest talkQuest)
+        {
+            SaveTalkData(talkQuest);
+        }
+        else if (modifiedQuest is FetchQuest fetchQuest)
+        {
+            SaveFetchData(fetchQuest);
+        }
+        else if (modifiedQuest is KillQuest killQuest)
+        {
+            SaveKillData(killQuest);
+        }
+
         SaveDialogueData(modifiedQuest);
 
-        QuestManager.Instance.UpdateQuest(_originalQuest, modifiedQuest);
+        // Create final update command
+        var updateCommand = new UpdateQuestCommand(_originalQuest, modifiedQuest);
+        CommandManager.Instance.ExecuteCommand(updateCommand);
+
         CloseEditor();
     }
-    private bool ShouldChangeQuestType()
-    {
-        return (_originalQuest is TalkQuest && _questTypeDropdown.value != 0) ||
-               (_originalQuest is FetchQuest && _questTypeDropdown.value != 1) ||
-               (_originalQuest is KillQuest && _questTypeDropdown.value != 2);
-    }
-    private BaseQuest CreateNewQuestOfSelectedType()
-    {
-        return _questTypeDropdown.value switch
-        {
-            0 => new TalkQuest(),
-            1 => new FetchQuest(),
-            2 => new KillQuest(),
-            _ => throw new System.NotImplementedException()
-        };
-    }
-
-
 
     private void SaveTalkData(TalkQuest quest)
     {
@@ -472,7 +484,60 @@ public class QuestEditorUIManager : MonoBehaviour
         }
     }
 
-    private void CloseEditor()
+    private void SetupEventListeners()
+    {
+        _titleInput.onEndEdit.AddListener(value => CreateFieldCommand(
+            () => _workingCopy.Title = value,
+            () => _workingCopy.Title = _titleInput.text,
+            "Title"
+        ));
+
+        _descriptionInput.onEndEdit.AddListener(value => CreateFieldCommand(
+            () => _workingCopy.Description = value,
+            () => _workingCopy.Description = _descriptionInput.text,
+            "Description"
+        ));
+
+        // Add similar handlers for other fields:
+        _rewardQuantityInput.onEndEdit.AddListener(value => CreateFieldCommand(
+            () => _workingCopy.Reward.Quantity = int.TryParse(value, out int result) ? result : 0,
+            () => _rewardQuantityInput.text = _workingCopy.Reward.Quantity.ToString(),
+            "Reward Quantity"
+        ));
+
+        _rewardGoldInput.onEndEdit.AddListener(value => CreateFieldCommand(
+            () => _workingCopy.Reward.Gold = int.TryParse(value, out int result) ? result : 0,
+            () => _rewardGoldInput.text = _workingCopy.Reward.Gold.ToString(),
+            "Gold Reward"
+        ));
+
+        // Add dropdown listeners
+        _startNPCDropdown.onValueChanged.AddListener(index => {
+            string selectedId = EntityDropdownHelper.GetSelectedID(_startNPCDropdown, _entityDB.NPCs);
+            CreateFieldCommand(
+                () => _workingCopy.StartNPC = selectedId,
+                () => EntityDropdownHelper.SetDropdownValue(_startNPCDropdown, _workingCopy.StartNPC, _entityDB.NPCs),
+                "Start NPC"
+            );
+            UpdateNPCDropdownIcon(_startNPCIcon, _startNPCDropdown);
+        });
+
+        // Add similar for other dropdowns...
+    }
+
+    private void CreateFieldCommand(Action execute, Action undo, string fieldName)
+    {
+        var command = new FieldEditCommand(
+            execute: execute,
+            undo: undo,
+            fieldName: fieldName,
+            quest: _workingCopy
+        );
+
+        CommandManager.Instance.ExecuteCommand(command);
+    }
+
+private void CloseEditor()
     {
         _isEditing = false;
         _editorPanel.SetActive(false);
@@ -481,6 +546,26 @@ public class QuestEditorUIManager : MonoBehaviour
         _startNPCDropdown.onValueChanged.RemoveAllListeners();
         _deliveryNPCDropdown.onValueChanged.RemoveAllListeners();
         _rewardItemDropdown.onValueChanged.RemoveAllListeners();
+    }
+
+    private void InitializeUIWithWorkingCopy()
+    {
+        if (_workingCopy == null) return;
+
+        _titleInput.text = _workingCopy.Title;
+        _descriptionInput.text = _workingCopy.Description;
+        _rewardQuantityInput.text = _workingCopy.Reward.Quantity.ToString();
+        _rewardGoldInput.text = _workingCopy.Reward.Gold.ToString();
+
+        // Initialize dropdowns
+        EntityDropdownHelper.SetDropdownValue(_startNPCDropdown, _workingCopy.StartNPC, _entityDB.NPCs);
+        EntityDropdownHelper.SetDropdownValue(_deliveryNPCDropdown, _workingCopy.DeliveryNPC, _entityDB.NPCs);
+        EntityDropdownHelper.SetDropdownValue(_rewardItemDropdown, _workingCopy.Reward?.ItemID, _entityDB.Items);
+
+        // Update icons
+        UpdateNPCDropdownIcon(_startNPCIcon, _startNPCDropdown);
+        UpdateNPCDropdownIcon(_deliveryNPCIcon, _deliveryNPCDropdown);
+        UpdateItemDropdownIcon(_rewardItemIcon, _rewardItemDropdown);
     }
 
     private void RefreshEditor(BaseQuest quest)
@@ -513,6 +598,8 @@ public class QuestEditorUIManager : MonoBehaviour
         AppEvents.OnUndoRedoPerformed -= HandleUndoRedo;
         AppEvents.OnQuestAffectedByUndoRedo -= HandleAffectedQuest;
     }
+
+
 
     //this shit should move to a dedicated tools class. wrong responsibility here but we ball
     private int ParseInt(string value)

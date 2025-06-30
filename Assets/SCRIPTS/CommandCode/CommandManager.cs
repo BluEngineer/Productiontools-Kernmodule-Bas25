@@ -43,13 +43,12 @@ public class CommandManager : Singleton<CommandManager>
             command.Undo();
             _redoStack.Push(command);
 
-            // Notify about undo operation
             AppEvents.InvokeUndoRedoPerformed();
 
-            // Check if command affects a quest
-            if (command is BaseCommand questCommand && questCommand.AffectedQuest != null)
+            // Refresh UI for affected quest
+            if (command.AffectedQuest != null)
             {
-                AppEvents.InvokeQuestAffected(questCommand.AffectedQuest);
+                AppEvents.InvokeQuestAffected(command.AffectedQuest);
             }
         }
     }

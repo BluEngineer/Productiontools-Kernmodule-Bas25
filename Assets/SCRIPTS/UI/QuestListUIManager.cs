@@ -54,7 +54,10 @@ public class QuestListUIManager : MonoBehaviour
     {
         GameObject itemObj = Instantiate(_questItemPrefab, _scrollContent);
         var questItem = itemObj.GetComponent<UIQuestListItem>();
-        questItem.Initialize(quest);
+        questItem.Initialize(quest, () => {
+            // Select quest and open editor
+            AppEvents.NotifyQuestSelected(quest);
+        });
     }
 
     public void ExportAllQuests()
